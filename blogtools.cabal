@@ -2,7 +2,7 @@
 -- documentation, see http://haskell.org/cabal/users-guide/
 
 name:                blogtools
-version:             0.1.0.0
+version:             0.1.0.1
 synopsis:            blog scraping tools
 -- description:         
 license:             MIT
@@ -16,9 +16,22 @@ extra-source-files:  README.md
 cabal-version:       >=1.10
 
 library
-  -- exposed-modules:     
+  exposed-modules:     Web.Blog.Tools
   -- other-modules:       
   -- other-extensions:    
   build-depends:       base >=4.6 && <4.7
+                     , network
   -- hs-source-dirs:      
   default-language:    Haskell2010
+
+test-suite spec
+  type:                 exitcode-stdio-1.0
+  default-language:     Haskell2010
+  other-modules:        BlogToolsSpec
+  hs-source-dirs:       test
+  ghc-options:          -Wall
+  main-is:              Spec.hs
+  build-depends:        base
+                      , hspec >= 1.3
+                      , QuickCheck
+                      , blogtools
