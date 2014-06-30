@@ -33,7 +33,7 @@ Test-Suite doctest
   Default-Language:     Haskell2010
   HS-Source-Dirs:       test
   Ghc-Options:          -threaded -Wall
-  Main-Is:              doctests.hs
+  Main-Is:              doctest.hs
   Build-Depends:        base
                       , doctest >= 0.9.3
 
