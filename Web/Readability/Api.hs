@@ -73,10 +73,9 @@ instance FromJSON ReaderApiResponse where
                          v .: "rendered_pages"
   parseJSON _          = mzero
 
+
 saveEntry :: Url -> IO ()
 saveEntry entry_url = 
---   a <- simpleHttp $ baseUrl ++ "?url=" ++ entry_url ++ "&token=" ++ token
---   let b = fromJust $ decode a :: ReaderApiResponse
   runSqlite dbname $ do
     runMigration migrateAll
     entries <- selectList ([ReaderApiResponseUrl ==. entry_url]::[Filter ReaderApiResponse]) [LimitTo 1]
@@ -84,10 +83,10 @@ saveEntry entry_url =
       then do
         b <- liftIO $ httpGetAndJson entry_url
         insert b
-        liftIO $ print $ readerApiResponseUrl b
+        liftIO $ putStrLn $ readerApiResponseUrl b
       else error "already saved."
     return ()
---     liftIO $ print $ map (readerApiResponseTitle . entityVal) entries
+
 
 httpGetAndJson :: Url -> IO ReaderApiResponse
 httpGetAndJson entry_url = do

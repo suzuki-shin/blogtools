@@ -1,6 +1,7 @@
 module Web.Blog.Tools (
   entryURLsOf
 , saveEntry
+, module Web.Blog.Type
 ) where
 
 import Web.Blog.Type
