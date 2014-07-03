@@ -1,5 +1,5 @@
 module Web.Blog.Hatena.Diary (
-   entryURIsOf
+   entryURLsOf
  , archiveURLs
  , entryURLsFromArchiveURL
 ) where
@@ -16,16 +16,16 @@ import Data.List (nub, sort)
 import Control.Monad (forM_, mapM_)
 import Control.Monad.IO.Class (liftIO)
 
--- | entryURIsOf
--- >>> entryURIsOf $ fromJust $ parseURI "http://d.hatena.ne.jp/suzuki-shin/"
+-- | entryURLsOf
+-- > entryURLsOf $ fromJust $ parseURI "http://d.hatena.ne.jp/suzuki-shin/"
 -- [http://d.hatena.ne.jp/suzuki-shin/2014/06/02/hogehoge,http://d.hatena.ne.jp/suzuki-shin/2014/06/01/fugafuga]
-entryURIsOf :: String -> IO [String]
-entryURIsOf baseUri = do
+entryURLsOf :: String -> IO [String]
+entryURLsOf baseUri = do
   aURLs <- archiveURLs baseUri
   concat <$> mapM (liftIO . entryURLsFromArchiveURL) aURLs
 
 -- | archiveURLs
--- >>> archiveURLs "http://d.hatena.ne.jp/hogehoge"
+-- > archiveURLs "http://d.hatena.ne.jp/hogehoge"
 -- ["http://d.hatena.ne.jp/hogehoge/archive?word=&of=50","http://d.hatena.ne.jp/hogehoge/archive?word=&of=100","http://d.hatena.ne.jp/hogehoge/archive?word=&of=150","http://d.hatena.ne.jp/hogehoge/archive?word=&of=200","http://d.hatena.ne.jp/hogehoge/archive?word=&of=250","http://d.hatena.ne.jp/hogehoge/archive?word=&of=300"]
 archiveURLs :: String -> IO [String]
 archiveURLs baseUrl = do
@@ -34,6 +34,9 @@ archiveURLs baseUrl = do
   links <- runX $ doc //> css "div" >>> hasAttrValue "id" (== "pager-top") >>> css "a" ! "href"
   return $ sort $ nub links
 
+-- | entryURLsFromArchiveURL
+-- > entryURLsFromArchiveURL "http://d.hatena.ne.jp/hogehoge/archive"
+-- ["
 entryURLsFromArchiveURL :: String -> IO [String]
 entryURLsFromArchiveURL archiveURL = do
   c <- simpleHttp archiveURL
