@@ -12,6 +12,7 @@ module Web.Readability.Api (
   saveEntry
 ) where
 
+import Web.Blog.Type (Url)
 import Data.Text (Text)
 import Data.Maybe (fromJust)
 import Control.Monad (mzero)
@@ -24,7 +25,7 @@ import Database.Persist.Sqlite
 import Database.Persist.TH
 import System.Environment (getEnv)
 
-baseUrl :: String
+baseUrl :: Url
 baseUrl = "https://readability.com/api/content/v1/parser"
 dbname :: Text
 dbname = "entry.sqlite3"
@@ -72,7 +73,7 @@ instance FromJSON ReaderApiResponse where
                          v .: "rendered_pages"
   parseJSON _          = mzero
 
-saveEntry :: String -> IO ()
+saveEntry :: Url -> IO ()
 saveEntry entry_url = 
 --   a <- simpleHttp $ baseUrl ++ "?url=" ++ entry_url ++ "&token=" ++ token
 --   let b = fromJust $ decode a :: ReaderApiResponse
@@ -88,7 +89,7 @@ saveEntry entry_url =
     return ()
 --     liftIO $ print $ map (readerApiResponseTitle . entityVal) entries
 
-httpGetAndJson :: String -> IO ReaderApiResponse
+httpGetAndJson :: Url -> IO ReaderApiResponse
 httpGetAndJson entry_url = do
   token <- getToken
   a <- simpleHttp $ baseUrl ++ "?url=" ++ entry_url ++ "&token=" ++ token
