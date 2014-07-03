@@ -3,6 +3,7 @@ module Web.Blog.Tools (
 ) where
 
 import Web.Blog.Type
+import Web.Readability.Api
 import Network.URI
 import qualified Web.Blog.Hatena.Diary as HD (entryURLsOf)
 import qualified Web.Blog.Hatena.Blog as HB (entryURLsOf)
